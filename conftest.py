@@ -6,7 +6,7 @@ from HomePage import HomePage
 def chronium_page() -> Page:
     "Inititialize page"
     with sync_playwright() as playwright:
-        chronium = playwright.chromium.launch(headless=False)
+        chronium = playwright.chromium.launch(headless=True)
         yield chronium.new_page()
 
 @pytest.fixture(scope='function')
