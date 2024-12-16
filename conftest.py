@@ -33,7 +33,7 @@ def benchmark_data():
 
 @pytest.hookimpl(hookwrapper=True, tryfirst=True)
 def pytest_runtest_makereport(item, call = 'call'):
-    "To generate image and video for failed tests"
+    "This method is used across all test to generate screenshot and video for failed tests"
     report = yield
     page = item.funcargs['chronium_page']
     if report.get_result().outcome == 'failed':
