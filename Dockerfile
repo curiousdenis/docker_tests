@@ -1,6 +1,6 @@
-FROM mcr.microsoft.com/playwright/python:v1.49.1-noble
-COPY . .
-CMD ["pytest", "tests.py","--alluredir=allure-results"]
-RUN mkdir allure-results
-RUN pip install --no-cache-dir --upgrade pip \
-  && pip install --no-cache-dir -r requirements.txt
+FROM mcr.microsoft.com/playwright/python:v1.49.1-noble AS pytest_run
+RUN echo 'before test'
+
+FROM homebrew/brew:latest AS main
+RUN echo pytest_run
+RUN echo 'main text'
