@@ -14,11 +14,11 @@ def download_url_last_result(TOKEN: str, owner: str, repo: str, to_fetch: str) -
     data = r.json()
     env_file = os.getenv('GITHUB_ENV')
     if r.status_code == '200':
-        with open(env_file, "a") as myfile:
+        with open(env_file, "a") as myenv:
             if data["total_count"] != 0:
-                myfile.write(f"DOWNLOAD_LINK={data['artifacts'][0]['archive_download_url']}")
+                myenv.write(f"DOWNLOAD_LINK={data['artifacts'][0]['archive_download_url']}")
             else:
-                myfile.write(f"DOWNLOAD_LINK=EMPTY")
+                myenv.write(f"DOWNLOAD_LINK=EMPTY")
     else:
         raise ConnectionError(f'Status connection is off for your spec: owner = {owner}, repo = {repo}, fetch = {to_fetch}')
 
