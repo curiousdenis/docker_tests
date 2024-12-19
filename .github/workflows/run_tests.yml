@@ -35,10 +35,10 @@ jobs:
       - uses: actions/checkout@v4
       - run: URL_DOWNLOAD = python fetch_data_git.py TOKEN OWNER REPO FETCH
       - name: Create an empty folder when nothing to fetch
-        if: ${{ contains(URL_DOWNLOAD, "EMPTY") }}
+        if: ${{ contains(env.URL_DOWNLOAD, "EMPTY") }}
         run: zip -r artifacts.zip
       - name: Download a folder
-        if: ${{ !contains(URL_DOWNLOAD, "EMPTY") }}
+        if: ${{ !contains(env.URL_DOWNLOAD, "EMPTY") }}
         run: URL_DOWNLOAD -o artifacts.zip
       - run: mkdir allure-results && unzip artifacts.zip -d allure-results
       - uses: actions/upload-artifact@v4
