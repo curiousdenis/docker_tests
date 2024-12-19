@@ -10,5 +10,5 @@ jobs:
             with:
               python-version: '3.13'
           - uses: browser-actions/setup-chrome@v1
-          - uses: pip install -r requirements.txt
+          - run: pip install -r requirements.txt
           - run: pytest tests.py
