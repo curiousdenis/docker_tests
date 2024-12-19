@@ -42,7 +42,7 @@ jobs:
           java-version: '21'
       - run: brew install allure
       - uses: actions/download-artifact@v4
-      - run: allure generate -c results -o allure-report
+      - run: allure generate -c results -o _site
       - uses: actions/upload-artifact@v4
         with:
           name: _site
@@ -54,4 +54,6 @@ jobs:
     steps:
       - uses: actions/download-artifact@v4
       - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
       - uses: actions/deploy-pages@v4
