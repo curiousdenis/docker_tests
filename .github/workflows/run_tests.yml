@@ -35,10 +35,10 @@ jobs:
       - run: pip install requests
       - run: python fetch_data_git.py ${{ secrets.TOKEN }} ${{ env.OWNER }} ${{ env.REPO }} ${{ env.FETCH }}
       - name: Download latest artifact as a zip file
-        if: ${{ env.DOWNLOAD_LINK == 'EMPTY' }}
+        if: ${{ !env.DOWNLOAD_LINK == 'EMPTY' }}
         run: ${{ env.DOWNLOAD_LINK }} -o artifacts.zip
       - name: Create an empty zip file when there is no artifacts
-        if: ${{ !env.DOWNLOAD_LINK == 'EMPTY' }}
+        if: ${{ env.DOWNLOAD_LINK == 'EMPTY' }}
         run: zip -r artifacts.zip
       - run: mkdir allure-results && unzip artifacts.zip -d allure-results
       - uses: actions/upload-artifact@v4
