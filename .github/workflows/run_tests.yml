@@ -1,15 +1,5 @@
 name: Automated tests
 
-env:
-  TOKEN: ${{ secrets.TOKEN }}
-  OWNER: "curiousdenis"
-  REPO: "docker_tests"
-
-permissions:
-  id-token: write
-  pages: write
-  contents: read
-
 on:
   workflow_dispatch:
     inputs:
@@ -21,7 +11,6 @@ on:
         options:
           - run_all_tests
           - run_one_test
-
 
 jobs:
 
