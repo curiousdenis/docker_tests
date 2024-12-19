@@ -12,10 +12,6 @@ on:
           - run_all_tests
           - run_one_test
 
-env:
-  TOKEN: ${{ secrets.TOKEN }}
-  OWNER: "curiousdenis"
-  REPO: "docker_tests"
 
 permissions:
   id-token: write
