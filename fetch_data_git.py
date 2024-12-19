@@ -1,7 +1,8 @@
 import requests
 import sys
+import os
 
-def download_url_last_result(TOKEN: str, owner: str, repo: str, to_fetch: str) -> str:
+def download_url_last_result(TOKEN: str, owner: str, repo: str, to_fetch: str) -> None:
     "This function will be used to fetch id of the last specific artifact to generate allure report"
     curl = f"https://api.github.com/repos/{owner}/{repo}/actions/artifacts"
     headers = {
@@ -11,10 +12,12 @@ def download_url_last_result(TOKEN: str, owner: str, repo: str, to_fetch: str) -
     }
     r = requests.get(curl + f"?name={to_fetch}", headers=headers)
     data = r.json()
-    if data["total_count"] != 0:
-        return data["artifacts"][0]["archive_download_url"]
-    else:
-        return 'EMPTY'
+    env_file = os.getenv('GITHUB_ENV')
+    with open(env_file, "a") as myfile:
+        if data["total_count"] != 0:
+            myfile.write(f"DOWNLOAD_LINK={data['artifacts'][0]['archive_download_url']}")
+        else:
+            myfile.write(f"DOWNLOAD_LINK=EMPTY")
 
 
 if __name__ == "__main__":
