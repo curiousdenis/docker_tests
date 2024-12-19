@@ -11,12 +11,40 @@ on:
             - run_all_tests
 jobs:
   test:
-        runs-on: ubuntu-latest
-        container:
-          image: mcr.microsoft.com/playwright/python:v1.49.1-noble
-        steps:
-          - uses: actions/checkout@v4
-          - run: pip install -r requirements.txt
-          - name: run_all_tests
-            if: "github.event.inputs.deployment_target == 'run_all_tests'"
-            run: pytest tests.py
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright/python:v1.49.1-noble
+    steps:
+      - uses: actions/checkout@v4
+      - run: pip install -r requirements.txt
+      - name: run_all_tests
+        if: "github.event.inputs.deployment_target == 'run_all_tests'"
+        run: pytest tests.py --alluredir=allure-results
+      - uses: actions/upload-artifact@v4
+        with:
+          name: results
+          path: allure-results
+
+  report:
+    runs-on: ubuntu-latest
+    needs: test
+    container:
+      image: brew install allure
+    steps:
+      - run: pip install allure
+      - uses: actions/download-artifact@v4
+      - run: allure generate -c allure-results -o allure-report
+      - uses: actions/upload-artifact@v4
+        with:
+          name: report
+          path: allure-report
+
+  publish:
+    runs-on: ubuntu-latest
+    needs: report
+    steps:
+      - uses: actions/download-artifact@v4
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: allure-report
+      - uses: actions/deploy-pages@v4
