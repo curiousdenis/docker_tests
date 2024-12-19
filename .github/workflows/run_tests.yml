@@ -5,13 +5,7 @@ jobs:
     test:
         runs-on: ubuntu-latest
         steps:
-          - name: install Chrome
-            uses: browser-actions/setup-chrome@v1
-          - name: setup Python
-            uses: actions/setup-python@v5
-          - name: Checkout repository
-            uses: actions/checkoutv4
+          - uses: actions/checkout@v4
+          - uses: actions/setup-python@v5
             with:
               python-version: '3.13'
-          - name: Install dependencies
-            run: pip install -r requirements.txt
