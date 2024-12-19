@@ -1,4 +1,5 @@
 name: Automated tests
+
 env:
   TOKEN: ${{ secrets.TOKEN }}
   OWNER: "curiousdenis"
