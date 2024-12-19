@@ -16,6 +16,8 @@ def download_url_last_result(TOKEN: str, owner: str, repo: str, to_fetch: str) -
     if r.status_code == 200:
         with open(env_file, "a") as myenv:
             if data["total_count"] != 0:
+                print(env_file)
+                raise ValueError('test')
                 myenv.write(f"DOWNLOAD_LINK={data['artifacts'][0]['archive_download_url']}")
             else:
                 myenv.write(f"DOWNLOAD_LINK=EMPTY")
