@@ -5,15 +5,15 @@ jobs:
     test:
         runs-on: ubuntu-latest
         steps:
-            - name: Checkout repository
-              uses: actions/checkout@v3
-            - name: setup Python
-              uses: actions/setup-python@v4
-              with:
-                  python-version: "3.14.0-alpha.2"
-            - name: Install Chrome
-              run: sudo apt-get install google-chrome-stable
-            - name: install dependencies
-              run: pip install -r requirements.txt
-            - name: Run tests
-              run: pytest
+          - name: install Chrome
+            uses: browser-actions/setup-chrome@v1
+          - name: setup Python
+            uses: actions/setup-python@v5
+          - name: Checkout repository
+            uses: actions/checkoutv4
+            with:
+              python-version: '3.13'
+          - name: Install dependencies
+            run: pip install -r requirements.txt
+          - name: Run tests
+            uses: pytests
