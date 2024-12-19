@@ -37,7 +37,7 @@ jobs:
     steps:
       - uses: actions/setup-java@v4
         with:
-          distribution: 'micrososft'
+          distribution: 'microsoft'
           java-version: '21'
       - run: brew install allure
       - uses: actions/download-artifact@v4
