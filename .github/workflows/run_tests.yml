@@ -5,7 +5,7 @@ on:
         deployment_target:
           description: Choose target
           required: true
-          default:
+          default: run_one_test
           type: choice
           options:
             - run_all_tests
@@ -33,7 +33,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: test
     container:
-      image: brew install allure
+      image: homebrew/brew:latest
     steps:
       - run: pip install allure
       - uses: actions/download-artifact@v4
