@@ -7,6 +7,6 @@ jobs:
         container:
           image: mcr.microsoft.com/playwright/python:v1.49.1-noble
         steps:
-          - uses: actions/checkout
+          - uses: actions/checkout@v4
           - run: pip install -r requirements.txt
           - run: pytest tests.py
