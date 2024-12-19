@@ -33,7 +33,7 @@ jobs:
         with:
           python-version: '3.13'
       - uses: actions/checkout@v4
-      - run: export URL_DOWNLOAD='python fetch_data_git.py env.TOKEN env.OWNER env.REPO env.FETCH'
+      - run: export URL_DOWNLOAD=${{ 'python fetch_data_git.py env.TOKEN env.OWNER env.REPO env.FETCH' }}
       - name: Download latest artifact as a zip file
         if: ${{ env.URL_DOWNLOAD == 'EMPTY' }}
         run: env.URL_DOWNLOAD -o artifacts.zip
