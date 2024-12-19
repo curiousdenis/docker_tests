@@ -24,8 +24,19 @@ permissions:
 
 jobs:
 
+  download_history:
+    runs-on: ubuntu-lastest
+    env:
+      FETCH: "allure-results"
+    steps:
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - uses: actions/checkout@v4
+
 
   test:
+    needs: download_history
     runs-on: ubuntu-latest
     container:
       image: mcr.microsoft.com/playwright/python:v1.49.1-noble
