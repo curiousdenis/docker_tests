@@ -13,11 +13,14 @@ def download_url_last_result(TOKEN: str, owner: str, repo: str, to_fetch: str) -
     r = requests.get(curl + f"?name={to_fetch}", headers=headers)
     data = r.json()
     env_file = os.getenv('GITHUB_ENV')
-    with open(env_file, "a") as myfile:
-        if data["total_count"] != 0:
-            myfile.write(f"DOWNLOAD_LINK={data['artifacts'][0]['archive_download_url']}")
-        else:
-            myfile.write(f"DOWNLOAD_LINK=EMPTY")
+    if r.status_code == '200':
+        with open(env_file, "a") as myfile:
+            if data["total_count"] != 0:
+                myfile.write(f"DOWNLOAD_LINK={data['artifacts'][0]['archive_download_url']}")
+            else:
+                myfile.write(f"DOWNLOAD_LINK=EMPTY")
+    else:
+        raise ConnectionError(f'Status connection is off for your spec: owner = {owner}, repo = {repo}, fetch = {to_fetch}')
 
 
 if __name__ == "__main__":
