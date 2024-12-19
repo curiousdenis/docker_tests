@@ -19,6 +19,7 @@ class TestWidget:
     """
     @staticmethod
     @pytest.mark.parametrize('name, email', [('Denis', 'test@mail.ru')])
+    @pytest.mark.run_one_test
     def test_positive_user_first_attempt(common_data, playwright_chrome_page, name, email):
         "Positive test case where we: goto url, open widget, and send user data in a form (name and email) and do some checks"
         playwright_chrome_page.website(common_data['url'])

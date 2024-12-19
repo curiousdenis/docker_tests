@@ -9,6 +9,7 @@ on:
           type: choice
           options:
             - run_all_tests
+            - run_one_test
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -20,6 +21,9 @@ jobs:
       - name: run_all_tests
         if: "github.event.inputs.deployment_target == 'run_all_tests'"
         run: pytest tests.py --alluredir=allure-results
+      - name: run_one_test
+        if: "github.event.inputs.deployment_target == 'run_one_test'"
+        run: pytest tests.py -m run_one_test --alluredir=allure-results
       - uses: actions/upload-artifact@v4
         with:
           name: results
