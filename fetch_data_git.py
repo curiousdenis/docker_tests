@@ -24,4 +24,4 @@ def download_url_last_result(TOKEN: str, owner: str, repo: str, to_fetch: str) -
 
 
 if __name__ == "__main__":
-    download_url_last_result(sys.argv[0], sys.argv[1], sys.argv[2], sys.argv[3])
+    download_url_last_result(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
