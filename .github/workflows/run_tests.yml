@@ -12,12 +12,42 @@ on:
           - run_all_tests
           - run_one_test
 
+env:
+  TOKEN: ${{ secrets.TOKEN }}
+  OWNER: "curiousdenis"
+  REPO: "docker_tests"
+
+permissions:
+  id-token: write
+  pages: write
+  contents: read
 
 jobs:
 
-
+  download_history:
+    runs-on: ubuntu-lastest
+    env:
+      FETCH: "allure-results"
+    steps:
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - uses: actions/checkout@v4
+      - run: URL_DOWNLOAD = python fetch_data_git.py TOKEN OWNER REPO FETCH
+      - name: Create an empty folder when nothing to fetch
+        if: contains(env.URL_DOWNLOAD, 'EMPTY')
+        run: zip -r artifacts.zip
+      - name: Download a folder
+        if: !contains(env.URL_DOWNLOAD, 'EMPTY')
+        run: URL_DOWNLOAD -o artifacts.zip
+      - run: mkdir allure-results && unzip artifacts.zip -d allure-results
+      - uses: actions/upload-artifact@v4
+        with:
+          name: allure-results
+          path: allure-results
 
   test:
+    needs: download_history
     runs-on: ubuntu-latest
     container:
       image: mcr.microsoft.com/playwright/python:v1.49.1-noble
