@@ -5,7 +5,7 @@ jobs:
     test:
         runs-on: ubuntu-latest
         container:
-          image: mcr.microsoft.com/playwright/python:v1.49.1-noble AS pytest_run
+          image: mcr.microsoft.com/playwright/python:v1.49.1-noble
         steps:
           - run: pip install -r requirements.txt
           - run: pytest tests.py
