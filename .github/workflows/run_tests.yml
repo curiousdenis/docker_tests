@@ -34,10 +34,12 @@ jobs:
     needs: test
     container:
       image: homebrew/brew:latest
+      options: --user root
     steps:
       - uses: actions/setup-java@v4
         with:
           distribution: 'microsoft'
+          java-version: '21'
       - run: brew install allure
       - uses: actions/download-artifact@v4
       - run: allure generate -c allure-results -o allure-report
