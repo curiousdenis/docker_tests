@@ -17,7 +17,7 @@ def download_url_last_result(TOKEN: str, owner: str, repo: str, to_fetch: str) -
         with open(env_file, "a") as myenv:
             if data["total_count"] != 0:
                 myenv.write(f"DOWNLOAD_LINK={data['artifacts'][0]['archive_download_url']}")
-                raise ValueError(f'{env_file}')
+                raise ValueError(f'{os.environ["DOWNLOAD_LINK"]}')
             else:
                 myenv.write(f"DOWNLOAD_LINK=EMPTY")
     else:
