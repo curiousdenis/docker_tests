@@ -36,6 +36,9 @@ jobs:
       image: homebrew/brew:latest
     steps:
       - uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
       - run: brew install allure
       - uses: actions/download-artifact@v4
       - run: allure generate -c allure-results -o allure-report
