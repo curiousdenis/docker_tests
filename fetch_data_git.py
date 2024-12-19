@@ -13,7 +13,7 @@ def download_url_last_result(TOKEN: str, owner: str, repo: str, to_fetch: str) -
     r = requests.get(curl + f"?name={to_fetch}", headers=headers)
     data = r.json()
     env_file = os.getenv('GITHUB_ENV')
-    if r.status_code == '200':
+    if r.status_code == 200:
         with open(env_file, "a") as myenv:
             if data["total_count"] != 0:
                 myenv.write(f"DOWNLOAD_LINK={data['artifacts'][0]['archive_download_url']}")
