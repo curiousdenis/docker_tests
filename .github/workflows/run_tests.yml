@@ -1,15 +1,20 @@
 name: Automated tests
+permissions:
+  id-token: write
 on:
-    workflow_dispatch:
-      inputs:
-        deployment_target:
-          description: Choose target
-          required: true
-          default: run_one_test
-          type: choice
-          options:
-            - run_all_tests
-            - run_one_test
+
+  workflow_dispatch:
+    inputs:
+      deployment_target:
+        description: Choose target
+        required: true
+        default: run_one_test
+        type: choice
+        options:
+          - run_all_tests
+          - run_one_test
+
+
 jobs:
   test:
     runs-on: ubuntu-latest
