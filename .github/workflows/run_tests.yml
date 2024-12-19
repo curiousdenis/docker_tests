@@ -34,7 +34,7 @@ jobs:
           python-version: '3.13'
       - uses: actions/checkout@v4
       - run: pip install requests
-      - run: python fetch_data_git.py env.TOKEN env.OWNER env.REPO env.FETCH
+      - run: ${{ python fetch_data_git.py env.TOKEN env.OWNER env.REPO env.FETCH }}
       - name: Download latest artifact as a zip file
         if: ${{ env.DOWNLOAD_LINK == 'EMPTY' }}
         run: env.DOWNLOAD_LINK -o artifacts.zip
