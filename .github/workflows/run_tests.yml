@@ -1,12 +1,22 @@
 name: Automated tests
 on:
-    push
+    workflow_dispatch:
+      inputs:
+        deployment_target:
+          description: Choose target
+          required: true
+          default:
+          type: choice
+          options:
+            - run_all_tests
 jobs:
-    test:
+  test:
         runs-on: ubuntu-latest
         container:
           image: mcr.microsoft.com/playwright/python:v1.49.1-noble
         steps:
           - uses: actions/checkout@v4
           - run: pip install -r requirements.txt
-          - run: pytest tests.py
+          - name: run_all_tests
+            if: "github.event.inputs.deployment_target == 'run_all_tests'"
+            run: pytest tests.py
