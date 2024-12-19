@@ -37,7 +37,7 @@ jobs:
     steps:
       - uses: actions/setup-java@v4
         with:
-          distribution: 'temurin'
+          distribution: 'micrososft'
           java-version: '21'
       - run: brew install allure
       - uses: actions/download-artifact@v4
