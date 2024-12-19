@@ -35,6 +35,7 @@ jobs:
     container:
       image: homebrew/brew:latest
     steps:
+      - uses: actions/setup-java@v4
       - run: brew install allure
       - uses: actions/download-artifact@v4
       - run: allure generate -c allure-results -o allure-report
