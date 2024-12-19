@@ -20,7 +20,9 @@ def download_url_last_result(TOKEN: str, owner: str, repo: str, to_fetch: str) -
             else:
                 myenv.write(f"DOWNLOAD_LINK=EMPTY")
     else:
-        raise ConnectionError(f'Status connection is off for your spec: owner = {owner}, repo = {repo}, fetch = {to_fetch}')
+        raise ConnectionError(f'Status connection is off for your spec: owner = {owner}, repo = {repo}, fetch = {to_fetch}\n'
+                              f'Your data = {data}\n'
+                              f'Status = {r.status_code}')
 
 
 if __name__ == "__main__":
