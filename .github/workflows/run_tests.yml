@@ -1,10 +1,15 @@
 name: Automated tests
+env:
+  TOKEN: ${{ secrets.TOKEN }}
+  OWNER: "curiousdenis"
+  REPO: "docker_tests"
+
 permissions:
   id-token: write
   pages: write
   contents: read
-on:
 
+on:
   workflow_dispatch:
     inputs:
       deployment_target:
@@ -18,22 +23,49 @@ on:
 
 
 jobs:
+
+  download_history:
+    runs-on: ubuntu-lastest
+    env:
+      FETCH: "allure-results"
+    steps:
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - uses: actions/checkout@v4
+      - run: URL_DOWNLOAD = python fetch_data_git.py TOKEN OWNER REPO FETCH
+      - name: Create an empty folder when nothing to fetch
+        if: ${{ contains(URL_DOWNLOAD, "EMPTY") }}
+        run: zip -r artifacts.zip
+      - name: Download a folder
+        if: ${{ !contains(URL_DOWNLOAD, "EMPTY") }}
+        run: URL_DOWNLOAD -o artifacts.zip
+      - run: mkdir allure-results && unzip artifacts.zip -d allure-results
+      - uses: actions/upload-artifact@v4
+        with:
+          name: allure-results
+          path: allure-results
+
   test:
+    needs: download_history
     runs-on: ubuntu-latest
     container:
       image: mcr.microsoft.com/playwright/python:v1.49.1-noble
     steps:
       - uses: actions/checkout@v4
       - run: pip install -r requirements.txt
+      - uses: actions/download-artifact@v4
       - name: run_all_tests
         if: "github.event.inputs.deployment_target == 'run_all_tests'"
         run: pytest tests.py --alluredir=allure-results
+        continue-on-error: true
       - name: run_one_test
         if: "github.event.inputs.deployment_target == 'run_one_test'"
         run: pytest tests.py -m run_one_test --alluredir=allure-results
+        continue-on-error: true
       - uses: actions/upload-artifact@v4
         with:
-          name: results
+          name: allure-results
           path: allure-results
 
   report:
@@ -49,7 +81,7 @@ jobs:
           java-version: '21'
       - run: brew install allure
       - uses: actions/download-artifact@v4
-      - run: allure generate -c results -o _site
+      - run: allure generate -c allure-results -o _site
       - uses: actions/upload-artifact@v4
         with:
           name: _site
