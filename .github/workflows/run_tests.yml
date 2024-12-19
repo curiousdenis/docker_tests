@@ -12,14 +12,20 @@ on:
           - run_all_tests
           - run_one_test
 
+env:
+  TOKEN: ${{ secrets.TOKEN }}
+  OWNER: "curiousdenis"
+  REPO: "docker_tests"
 
+permissions:
+  id-token: write
+  pages: write
+  contents: read
 
 jobs:
 
 
-
   test:
-    needs: download_history
     runs-on: ubuntu-latest
     container:
       image: mcr.microsoft.com/playwright/python:v1.49.1-noble
