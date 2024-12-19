@@ -34,6 +34,12 @@ jobs:
           python-version: '3.13'
       - uses: actions/checkout@v4
       - run: URL_DOWNLOAD = python fetch_data_git.py TOKEN OWNER REPO FETCH
+      - name: Create an empty folder when nothing to fetch
+        if: contains(env.URL_DOWNLOAD, 'EMPTY')
+        run: zip -r artifacts.zip
+      - name: Download a folder
+        if: !contains(env.URL_DOWNLOAD, 'EMPTY')
+        run: URL_DOWNLOAD -o artifacts.zip
 
 
   test:
