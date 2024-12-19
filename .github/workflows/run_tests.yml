@@ -13,10 +13,6 @@ on:
           - run_one_test
 
 
-permissions:
-  id-token: write
-  pages: write
-  contents: read
 
 jobs:
 
