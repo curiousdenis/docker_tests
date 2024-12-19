@@ -10,4 +10,4 @@ jobs:
             with:
               python-version: '3.13'
           - uses: browser-actions/setup-chrome@v1
-          - run: playwright
+          - run: pytest tests.py
