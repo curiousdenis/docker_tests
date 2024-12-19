@@ -34,10 +34,11 @@ jobs:
       - uses: actions/checkout@v4
       - run: pip install requests
       - run: DOWNLOAD_LINK=$(python fetch_data_git.py ${{ secrets.TOKEN }} ${{ env.OWNER }} ${{ env.REPO }} ${{ env.FETCH }})
+      - run: echo "DOWNLOAD_LINK=${DOWNLOAD_LINK}" >> GITHUB_ENV
       - run: mkdir allure-results
       - name: Download latest artifact as a zip file
-        if: ${{ !DOWNLOAD_LINK == 'EMPTY' }}
-        run: ${{ DOWNLOAD_LINK }} -o artifacts.zip && unzip artifacts.zip -d allure-results
+        if: ${{ !env.DOWNLOAD_LINK == 'EMPTY' }}
+        run: ${{ env.DOWNLOAD_LINK }} -o artifacts.zip && unzip artifacts.zip -d allure-results
       - uses: actions/upload-artifact@v4
         with:
           name: allure-results
