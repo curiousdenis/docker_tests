@@ -22,5 +22,9 @@ def download_url_last_result(TOKEN: str, owner: str, repo: str, to_fetch: str) -
                               f'Status = {r.status_code}')
 
 
+def fo():
+    return 'hello world'
+
+
 if __name__ == "__main__":
-    download_url_last_result(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
+    fo()
