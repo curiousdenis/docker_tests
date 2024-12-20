@@ -33,8 +33,8 @@ jobs:
           python-version: '3.13'
       - uses: actions/checkout@v4
       - run: pip install requests
-      - run: DOWNLOAD_LINK=$(python fetch_data_git.py ${{ secrets.TOKEN }} ${{ env.OWNER }} ${{ env.REPO }} ${{ env.FETCH }})
-      - run: echo "DOWNLOAD_LINK=${DOWNLOAD_LINK}" >> GITHUB_ENV
+      - run: chmod +x fetch_data_git.py
+      - run: echo "This is what your function return = $(python3 fetch_data_git.py)
       - run: mkdir allure-results
       - name: Download latest artifact as a zip file
         if: ${{ !env.DOWNLOAD_LINK == 'EMPTY' }}
