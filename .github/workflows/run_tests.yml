@@ -24,7 +24,6 @@ permissions:
 
 jobs:
   test:
-    needs: download_history
     runs-on: ubuntu-latest
     container:
       image: mcr.microsoft.com/playwright/python:v1.49.1-noble
