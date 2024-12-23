@@ -1,0 +1,108 @@
+name: Automated tests
+
+on:
+  workflow_dispatch:
+    inputs:
+      deployment_target:
+        description: Choose target
+        required: true
+        default: run_one_test
+        type: choice
+        options:
+          - run_all_tests
+          - run_one_test
+
+env:
+  OWNER: "curiousdenis"
+  REPO: "docker_tests"
+
+permissions:
+  id-token: write
+  pages: write
+  contents: read
+  actions: write
+
+jobs:
+  download_history:
+    runs-on: ubuntu-latest
+    env:
+      FETCH: "allure-results"
+    steps:
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - uses: actions/checkout@v4
+      - run: pip install requests
+      - run: > 
+          echo "DOWNLOAD_LINK=$(chmod +x fetch_data_git.py 
+          && python3 fetch_data_git.py ${{ secrets.TOKEN }} ${{ env.OWNER }} 
+          ${{ env.REPO }} ${{ env.FETCH }} | tail -n 1)" >> "$GITHUB_ENV"
+      - run: mkdir allure-results
+      - run: echo "Your download link = $DOWNLOAD_LINK"
+      - name: Download latest artifact as a zip file
+        if: ${{ env.DOWNLOAD_LINK != 'EMPTY' }}
+        run: >
+          curl -L \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.TOKEN }}" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            ${{ env.DOWNLOAD_LINK }} -o artifacts.zip -o artifacts.zip && unzip artifacts.zip -d allure-results
+      - uses: actions/upload-artifact@v3
+        with:
+          name: allure-results
+          path: allure-results
+          retention-days: 1
+
+  test:
+    needs: download_history
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright/python:v1.49.1-noble
+    steps:
+      - uses: actions/checkout@v4
+      - run: pip install -r requirements.txt
+      - uses: actions/download-artifact@v3
+      - name: run_all_tests
+        if: "github.event.inputs.deployment_target == 'run_all_tests'"
+        run: pytest tests.py --alluredir=allure-results
+        continue-on-error: true
+      - name: run_one_test
+        if: "github.event.inputs.deployment_target == 'run_one_test'"
+        run: pytest tests.py -m run_one_test --alluredir=allure-results
+        continue-on-error: true
+      - uses: actions/upload-artifact@v3
+        with:
+          name: allure-results
+          path: allure-results
+          retention-days: 1
+
+  report:
+    runs-on: ubuntu-latest
+    needs: test
+    container:
+      image: homebrew/brew:latest
+      options: --user root
+    steps:
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'microsoft'
+          java-version: '21'
+      - run: brew install allure
+      - uses: actions/download-artifact@v3
+      - run: allure generate -c allure-results -o _site
+      - uses: actions/upload-artifact@v3
+        with:
+          name: _site
+          path: _site
+          retention-days: 1
+
+  publish:
+    runs-on: ubuntu-latest
+    needs: report
+    steps:
+      - uses: actions/download-artifact@v3
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+          retention-days: 1
+      - uses: actions/deploy-pages@v4
