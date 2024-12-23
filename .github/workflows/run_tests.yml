@@ -37,7 +37,6 @@ jobs:
           echo "DOWNLOAD_LINK=$(chmod +x fetch_data_git.py 
           && python3 fetch_data_git.py ${{ secrets.TOKEN }} ${{ env.OWNER }} 
           ${{ env.REPO }} ${{ env.FETCH }} | tail -n 1)" >> "$GITHUB_ENV"
-      - run: mkdir allure-results
       - run: echo "Your download link = $DOWNLOAD_LINK"
       - name: Download latest artifact as a zip file
         if: ${{ env.DOWNLOAD_LINK != 'EMPTY' }}
