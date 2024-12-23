@@ -13,8 +13,18 @@ https://docs.google.com/document/d/1GKvzuQcRVdCYVpS90vg_Oi2Syk-m1qkJmr8RpU4alIw/
       - По упавшим отчетам: должен быть скриншот и видео  (несколько отчетов должны намерено упасть) 
 
 ## Что было выполнено:
-- [x] Написать checklist.txt
+- [x] Написать checklist.txt (см. файл в репе)
 - [x] 5-7 авто тестов
+    /tests.py
+    ```
+    test_positive_user_first_attempt 
+    test_positive_user_prompt
+    test_after_reload_test_not_disappear
+    test_widget_closing
+    test_buttons_to_be_clickable_that_will_fail
+    test_benchmark_for_menu
+    test_benchmark_for_price
+    ```
 - [ ] Тесты асинхронные
 - [x] Придерживаться паттерна Page Object, и принципам ООП
 - [ ] Тест должы быть упакованы в докер контейнер
